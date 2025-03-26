@@ -5,8 +5,11 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { signIn } from "next-auth/react"
+import { useState } from "react";
 
 export default function LoginForm(){
+    const [error, setError] = useState("")
+
     async function login(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
@@ -16,10 +19,11 @@ export default function LoginForm(){
             senha: formData.get("senha")
         }
 
-        signIn("credentials", {
-            ...data,
-            callbackUrl: '/'
-        })
+        const result = await signIn("credentials", { ...data, callbackUrl: "/" });
+
+        if (result?.error) {
+            setError("Credenciais inválidas");
+        }
     }
 
     return(
@@ -30,6 +34,7 @@ export default function LoginForm(){
                     <CardDescription>Ultilize seu email e senha</CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-5">
+                    {error && <p className="text-red-500">{error}</p>}
                     <div>
                         <Label htmlFor="email">Email</Label>
                         <Input name="email" id="email" placeholder="exemplo@email.com" type="email" />
