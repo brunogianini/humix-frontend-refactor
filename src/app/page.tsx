@@ -1,7 +1,8 @@
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import { AppSidebar } from "@/components/app-sidebar"
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { getServerSession } from "next-auth"
+import { redirect } from "next/navigation"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 
 export default async function Home() {
@@ -14,7 +15,9 @@ export default async function Home() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main>Ola mundo</main>
+      <main className="dark min-h-screen pb-12 w-full">
+
+      </main>
     </SidebarProvider>
     
   );
