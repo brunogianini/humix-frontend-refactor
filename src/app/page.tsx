@@ -10,6 +10,6 @@ export default async function Home() {
   }
 
   return (
-    <main>Olá mundo</main>
+    <main>Ola mundo</main>
   );
 }
