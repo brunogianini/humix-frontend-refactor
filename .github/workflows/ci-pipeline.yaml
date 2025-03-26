@@ -1,0 +1,25 @@
+name: CI Pipeline Testes
+
+on:
+  workflow_dispatch:
+jobs:
+  install-build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 23
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Construir o projeto
+        run: npm run build
+
+      - name: Executar testes unitários
+        run: npm test
