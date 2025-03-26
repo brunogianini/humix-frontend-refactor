@@ -1,3 +1,5 @@
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -10,6 +12,10 @@ export default async function Home() {
   }
 
   return (
-    <main>Ola mundo</main>
+    <SidebarProvider>
+      <AppSidebar />
+      <main>Ola mundo</main>
+    </SidebarProvider>
+    
   );
 }
