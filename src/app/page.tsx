@@ -1,8 +1,9 @@
 import { AppSidebar } from "@/components/app-sidebar"
+import ProfileTabs from "@/components/profile-tabs"
 import { SidebarProvider } from "@/components/ui/sidebar"
+import UserStats from "@/components/user-stats"
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 
 export default async function Home() {
@@ -15,8 +16,9 @@ export default async function Home() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="dark min-h-screen pb-12 w-full">
-
+      <main className="dark min-h-screen pb-12 w-full p-5">
+        <UserStats />
+        <ProfileTabs />
       </main>
     </SidebarProvider>
     
