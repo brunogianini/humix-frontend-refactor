@@ -6,8 +6,8 @@ export default function BandasFavoritasCard(){
         <Card className="bg-zinc-900 border-zinc-800">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                         <div>
-                            <CardTitle className="text-white">Albums favoritos</CardTitle>
-                            <CardDescription className="text-zinc-400">Seus álbums com a maior avaliação</CardDescription>
+                            <CardTitle className="text-white">Bandas Favoritas</CardTitle>
+                            <CardDescription className="text-zinc-400">Suas bandas com a maior avaliação</CardDescription>
                         </div>
                     </CardHeader>
                     <CardContent>
