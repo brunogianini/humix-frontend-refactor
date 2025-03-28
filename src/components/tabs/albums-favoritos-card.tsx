@@ -1,4 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import AlbumItem from "./album-item";
 
 export default function AlbumsFavoritosCard(){
 
@@ -11,90 +12,12 @@ export default function AlbumsFavoritosCard(){
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3">
-                            <img
-                                src={"/placeholder.svg"}
-                                alt="teste"
-                                className="h-12 w-12 rounded-md object-cover"
-                            />
-                            <div className="flex-1 min-w-0">
-                                <h4 className="truncate text-sm font-medium text-white">teste</h4>
-                                <p className="truncate text-xs text-zinc-400">teste</p>
-                            </div>
-                            <div className="flex items-center gap-1">
-                                <span className="text-sm font-medium text-white">10</span>
-                            </div>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3">
-                            <img
-                                src={"/placeholder.svg"}
-                                alt="teste"
-                                className="h-12 w-12 rounded-md object-cover"
-                            />
-                            <div className="flex-1 min-w-0">
-                                <h4 className="truncate text-sm font-medium text-white">teste</h4>
-                                <p className="truncate text-xs text-zinc-400">teste</p>
-                            </div>
-                            <div className="flex items-center gap-1">
-                                <span className="text-sm font-medium text-white">10</span>
-                            </div>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3">
-                            <img
-                                src={"/placeholder.svg"}
-                                alt="teste"
-                                className="h-12 w-12 rounded-md object-cover"
-                            />
-                            <div className="flex-1 min-w-0">
-                                <h4 className="truncate text-sm font-medium text-white">teste</h4>
-                                <p className="truncate text-xs text-zinc-400">teste</p>
-                            </div>
-                            <div className="flex items-center gap-1">
-                                <span className="text-sm font-medium text-white">10</span>
-                            </div>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3">
-                            <img
-                                src={"/placeholder.svg"}
-                                alt="teste"
-                                className="h-12 w-12 rounded-md object-cover"
-                            />
-                            <div className="flex-1 min-w-0">
-                                <h4 className="truncate text-sm font-medium text-white">teste</h4>
-                                <p className="truncate text-xs text-zinc-400">teste</p>
-                            </div>
-                            <div className="flex items-center gap-1">
-                                <span className="text-sm font-medium text-white">10</span>
-                            </div>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3">
-                            <img
-                                src={"/placeholder.svg"}
-                                alt="teste"
-                                className="h-12 w-12 rounded-md object-cover"
-                            />
-                            <div className="flex-1 min-w-0">
-                                <h4 className="truncate text-sm font-medium text-white">teste</h4>
-                                <p className="truncate text-xs text-zinc-400">teste</p>
-                            </div>
-                            <div className="flex items-center gap-1">
-                                <span className="text-sm font-medium text-white">10</span>
-                            </div>
-                            </div>
-                        </div>
+                        <AlbumItem album={{
+                            nome: "Ants From Up There",
+                            banda: "Black Country, New Road",
+                            capa: "https://cdn-images.dzcdn.net/images/cover/63683966b1ecb7d3c82118cf27641a58/500x500.jpg",
+                            nota: 10
+                        }} />
                     </CardContent>
                 </Card>
     )
