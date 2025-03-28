@@ -23,7 +23,7 @@ const data = {
       items: [
         {
           title: "Não ouvidos",
-          url: "#",
+          url: "/nao-ouvidos",
         },
         {
           title: "Classificados",
