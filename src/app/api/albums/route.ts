@@ -20,6 +20,36 @@ const albums: Album[] = [
       banda: "Deodato",
       capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
       nota: 0,
+    },
+    {
+      nome: "First Cuckoo",
+      banda: "Deodato",
+      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
+      nota: 0,
+    },
+    {
+      nome: "First Cuckoo",
+      banda: "Deodato",
+      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
+      nota: 0,
+    },
+    {
+      nome: "First Cuckoo",
+      banda: "Deodato",
+      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
+      nota: 0,
+    },
+    {
+      nome: "First Cuckoo",
+      banda: "Deodato",
+      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
+      nota: 0,
+    },
+    {
+      nome: "First Cuckoo",
+      banda: "Deodato",
+      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
+      nota: 0,
     }
   ];
   

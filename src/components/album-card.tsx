@@ -9,8 +9,8 @@ export default function AlbumCard({album}: {album: Album}){
     }
 
     return(
-        <Card className="h-60 w-60 p-0 relative">
-            <img className="h-60 w-60 rounded-lg" src={album.capa}/>
+        <Card className="h-63.5 w-63.5 p-0 relative cursor-pointer">
+            <img className="h-63.5 w-63.5 rounded-lg" src={album.capa}/>
             {
                 hasRating ?
 
