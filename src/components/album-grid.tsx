@@ -26,7 +26,7 @@ export default function AlbumGrid(){
                     nome: album.nome,
                     banda: album.banda,
                     capa: album.capa,
-                    nota: 10
+                    nota: album.nota
                 }} />
             ))}
         </main>
