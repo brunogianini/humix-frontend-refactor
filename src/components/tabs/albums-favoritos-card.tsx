@@ -1,7 +1,24 @@
+"use client"
+
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import AlbumItem from "./album-item";
+import { Album } from "@/types/Album";
 
 export default function AlbumsFavoritosCard(){
+    const [albums, setAlbums] = useState<Album[]>([])
+
+    async function fetchAlbums(){
+        await fetch("/api/album")
+            .then((res) => res.json())
+            .then((data) => {
+                setAlbums(data)
+            })
+    }
+
+    useEffect(() => {
+        fetchAlbums()
+    }, [])
 
     return(
         <Card className="bg-zinc-900 border-zinc-800">
@@ -11,13 +28,15 @@ export default function AlbumsFavoritosCard(){
                             <CardDescription className="text-zinc-400">Seus álbums com a maior avaliação</CardDescription>
                         </div>
                     </CardHeader>
-                    <CardContent>
-                        <AlbumItem album={{
-                            nome: "Ants From Up There",
-                            banda: "Black Country, New Road",
-                            capa: "https://cdn-images.dzcdn.net/images/cover/63683966b1ecb7d3c82118cf27641a58/500x500.jpg",
-                            nota: 10
-                        }} />
+                    <CardContent className="flex gap-5 flex-col">
+                        {albums.map((album, i) => (
+                            <AlbumItem key={i} album={{
+                                nome: album.nome,
+                                banda: album.banda,
+                                capa: album.capa,
+                                nota: album.nota
+                            }} />
+                        ))}
                     </CardContent>
                 </Card>
     )
