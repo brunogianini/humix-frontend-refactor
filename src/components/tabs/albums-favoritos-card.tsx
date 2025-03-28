@@ -9,7 +9,7 @@ export default function AlbumsFavoritosCard(){
     const [albums, setAlbums] = useState<Album[]>([])
 
     async function fetchAlbums(){
-        await fetch("/api/album")
+        await fetch("/api/album-favorito")
             .then((res) => res.json())
             .then((data) => {
                 setAlbums(data)
