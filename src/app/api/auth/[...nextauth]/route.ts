@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma"
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 
-const handler = NextAuth({
+const authOptions = NextAuth({
     pages: {
         signIn: "/login"
     },
@@ -37,4 +37,5 @@ const handler = NextAuth({
       ]
 })
 
-export { handler as GET, handler as POST }
+const handler = NextAuth(authOptions)
+export { handler as GET, handler as POST,authOptions  }

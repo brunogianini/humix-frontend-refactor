@@ -1,60 +1,123 @@
-import { Album } from "@/types/Album";
+import prisma from "@/lib/prisma";
+import { getAlbumTrack, getBandImage, searchAlbum } from "@/lib/spotifyClient";
 import { NextRequest, NextResponse } from "next/server";
 
 
-const albums: Album[] = [
-    {
-      nome: "Ants From Up There",
-      banda: "Black Country, New Road",
-      capa: "https://cdn-images.dzcdn.net/images/cover/63683966b1ecb7d3c82118cf27641a58/500x500.jpg",
-      nota: 9,
-    },
-    {
-      nome: "In Rainbows",
-      banda: "Radiohead",
-      capa: "https://upload.wikimedia.org/wikipedia/pt/9/96/Radiohead_-_In_Rainbows.jpg",
-      nota: 9,
-    },
-    {
-      nome: "First Cuckoo",
-      banda: "Deodato",
-      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
-      nota: 0,
-    },
-    {
-      nome: "First Cuckoo",
-      banda: "Deodato",
-      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
-      nota: 0,
-    },
-    {
-      nome: "First Cuckoo",
-      banda: "Deodato",
-      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
-      nota: 0,
-    },
-    {
-      nome: "First Cuckoo",
-      banda: "Deodato",
-      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
-      nota: 0,
-    },
-    {
-      nome: "First Cuckoo",
-      banda: "Deodato",
-      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
-      nota: 0,
-    },
-    {
-      nome: "First Cuckoo",
-      banda: "Deodato",
-      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
-      nota: 0,
-    }
-  ];
-  
-
-
   export async function GET(req: NextRequest) {
-    return NextResponse.json(albums);
+
+    try{
+        const albums = await prisma.album.findMany({
+            where: {
+                users: { 
+                    some: {
+                        id: "123", 
+                    },
+                },
+                ratings: {
+                    none: {
+                        userId: "123",
+                        nota: { gt: 0 }
+                    }
+                }
+        
+            },
+            include: {
+                banda: true, 
+                songs: true,
+                ratings: {
+                    where: {
+                        userId: "123", 
+                    }
+                    
+                }
+            }    
+        })
+    
+        return NextResponse.json(albums)
+    } catch {
+        return NextResponse.json({message: "erro ao pegar albums"})
+    }
+    
+  }
+
+  export async function POST(req: NextRequest, { params }: { params: { userId: string } }){
+    const { nome, banda } = await req.json()
+
+    const album = await searchAlbum(nome, banda)
+
+    const album_nome = album.name
+    const album_link = album.uri
+    const album_art = album.images[0].url
+
+    const banda_nome = album.artists[0].name
+    const banda_image = await getBandImage(album.artists[0].id)
+
+    const trackData = await getAlbumTrack(album.uri)
+    const songs = trackData.items
+
+    const songCreationData = songs.map((song: { name: string }) => ({
+        name: song.name,
+        link: "a",
+    }))
+
+    try {
+
+      const existingAlbum = await prisma.album.findUnique({
+          where: { link: album_link },
+      })
+
+
+      const band = await prisma.banda.upsert({
+          where: { nome: banda_nome },
+          update: { foto: banda_image.images[0].url },
+          create: {
+              nome: banda_nome,
+              foto: banda_image.images[0].url,
+          }
+      })
+
+      let album;
+      if (existingAlbum) {
+          album = await prisma.album.update({
+              where: { link: album_link },
+              data: {
+                  users: {
+                      connect: { id: "123" },
+                  },
+              },
+          })
+      } else {
+
+          const album = await prisma.album.create({
+              data: {
+                  nome: album_nome,
+                  link: album_link,
+                  capa: album_art,
+                  nota: 0.0,
+                  banda: {
+                      connect: { id: band.id },
+                  },
+                  songs: {
+                      create: songCreationData,
+                  },
+                  users: {
+                      connect: { id: "123" }
+                  }
+              },
+              include: {
+                  banda: true,
+                  songs: true,
+                  users: true,
+              }
+          })
+
+      }
+
+      return NextResponse.json(album)
+
+    } catch (error) {
+        console.log(error)
+        return NextResponse.json({ error: 'Error creating album and band' });
+    }
+
   }
