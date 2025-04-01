@@ -40,7 +40,7 @@ import { NextRequest, NextResponse } from "next/server";
     
   }
 
-  export async function POST(req: NextRequest, { params }: { params: { userId: string } }){
+  export async function POST(req: NextRequest){
     const { nome, banda } = await req.json()
 
     const album = await searchAlbum(nome, banda)
@@ -110,10 +110,10 @@ import { NextRequest, NextResponse } from "next/server";
                   users: true,
               }
           })
-
+          return NextResponse.json(album)
       }
 
-      return NextResponse.json(album)
+      
 
     } catch (error) {
         console.log(error)
