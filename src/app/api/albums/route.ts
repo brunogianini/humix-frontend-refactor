@@ -41,6 +41,8 @@ export async function GET(req: NextRequest) {
 
   export async function POST(req: NextRequest){
     const { nome, banda } = await req.json()
+    const session = await getServerSession(authOptions)
+    const userId = session?.user.id
 
     const album = await searchAlbum(nome, banda)
 
@@ -81,7 +83,7 @@ export async function GET(req: NextRequest) {
               where: { link: album_link },
               data: {
                   users: {
-                      connect: { id: "123" },
+                      connect: { id: userId },
                   },
               },
           })
@@ -100,7 +102,7 @@ export async function GET(req: NextRequest) {
                       create: songCreationData,
                   },
                   users: {
-                      connect: { id: "123" }
+                      connect: { id: userId }
                   }
               },
               include: {
@@ -116,7 +118,8 @@ export async function GET(req: NextRequest) {
 
     } catch (error) {
         console.log(error)
-        return NextResponse.json({ error: 'Error creating album and band' });
+        return NextResponse.json({ error: 'Erro ao criar o album' });
     }
 
+    return NextResponse.json({ error: 'Não foi possivel criar o álbum' });
   }
