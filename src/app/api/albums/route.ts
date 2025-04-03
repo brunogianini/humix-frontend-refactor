@@ -1,44 +1,43 @@
 import prisma from "@/lib/prisma";
 import { getAlbumTrack, getBandImage, searchAlbum } from "@/lib/spotifyClient";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 
-  export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest) {
+    const session = await getServerSession(authOptions)
+    const userId = session?.user.id
 
-    try{
+    try {
         const albums = await prisma.album.findMany({
             where: {
                 users: { 
-                    some: {
-                        id: "123", 
-                    },
+                    some: { id: userId }
                 },
                 ratings: {
                     none: {
-                        userId: "123",
+                        userId: userId,
                         nota: { gt: 0 }
                     }
                 }
-        
             },
             include: {
                 banda: true, 
                 songs: true,
                 ratings: {
-                    where: {
-                        userId: "123", 
-                    }
-                    
+                    where: { userId: userId }
                 }
-            }    
-        })
-    
-        return NextResponse.json(albums)
-    } catch {
-        return NextResponse.json({message: "erro ao pegar albums"})
+            }
+        });
+
+        return NextResponse.json(albums);
+    } catch (error) {
+        console.error("Erro ao buscar álbuns:", error);
+        return NextResponse.json({ message: "Erro ao buscar álbuns" }, { status: 500 });
     }
-    
-  }
+}
+
 
   export async function POST(req: NextRequest){
     const { nome, banda } = await req.json()
