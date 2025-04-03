@@ -1,8 +1,9 @@
+import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { getAlbumTrack, getBandImage, searchAlbum } from "@/lib/spotifyClient";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { authOptions } from "../auth/[...nextauth]/route";
+
 
 
 export async function GET(req: NextRequest) {
@@ -43,7 +44,8 @@ export async function GET(req: NextRequest) {
 
   export async function POST(req: NextRequest){
     const { nome, banda } = await req.json()
-    const session = await getServerSession()
+    
+    const session = await getServerSession(authOptions)
     const userId = session?.user.id
 
     const album = await searchAlbum(nome, banda)
