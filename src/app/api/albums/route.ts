@@ -1,60 +1,128 @@
-import { Album } from "@/types/Album";
+import { authOptions } from "@/lib/auth";
+import prisma from "@/lib/prisma";
+import { getAlbumTrack, getBandImage, searchAlbum } from "@/lib/spotifyClient";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 
-const albums: Album[] = [
-    {
-      nome: "Ants From Up There",
-      banda: "Black Country, New Road",
-      capa: "https://cdn-images.dzcdn.net/images/cover/63683966b1ecb7d3c82118cf27641a58/500x500.jpg",
-      nota: 9,
-    },
-    {
-      nome: "In Rainbows",
-      banda: "Radiohead",
-      capa: "https://upload.wikimedia.org/wikipedia/pt/9/96/Radiohead_-_In_Rainbows.jpg",
-      nota: 9,
-    },
-    {
-      nome: "First Cuckoo",
-      banda: "Deodato",
-      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
-      nota: 0,
-    },
-    {
-      nome: "First Cuckoo",
-      banda: "Deodato",
-      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
-      nota: 0,
-    },
-    {
-      nome: "First Cuckoo",
-      banda: "Deodato",
-      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
-      nota: 0,
-    },
-    {
-      nome: "First Cuckoo",
-      banda: "Deodato",
-      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
-      nota: 0,
-    },
-    {
-      nome: "First Cuckoo",
-      banda: "Deodato",
-      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
-      nota: 0,
-    },
-    {
-      nome: "First Cuckoo",
-      banda: "Deodato",
-      capa: "https://i.scdn.co/image/ab67616d0000b273dddae1d853b47729d2254c85",
-      nota: 0,
+
+export async function GET(req: NextRequest) {
+    const session = await getServerSession(authOptions)
+    const userId = session?.user.id
+    
+
+    try {
+        const albums = await prisma.album.findMany({
+            where: {
+                users: { 
+                    some: { id: userId }
+                },
+                ratings: {
+                    none: {
+                        userId: userId,
+                        nota: { gt: 0 }
+                    }
+                }
+            },
+            include: {
+                banda: true, 
+                songs: true,
+                ratings: {
+                    where: { userId: userId }
+                }
+            }
+        });
+
+        return NextResponse.json(albums);
+    } catch (error) {
+        console.error("Erro ao buscar álbuns:", error);
+        return NextResponse.json({ message: "Erro ao buscar álbuns" }, { status: 500 });
     }
-  ];
-  
+}
 
 
-  export async function GET(req: NextRequest) {
-    return NextResponse.json(albums);
+  export async function POST(req: NextRequest){
+    const { nome, banda } = await req.json()
+    
+    const session = await getServerSession(authOptions)
+    const userId = session?.user.id
+
+    const album = await searchAlbum(nome, banda)
+
+    const album_nome = album.name
+    const album_link = album.uri
+    const album_art = album.images[0].url
+
+    const banda_nome = album.artists[0].name
+    const banda_image = await getBandImage(album.artists[0].id)
+
+    const trackData = await getAlbumTrack(album.uri)
+    const songs = trackData.items
+
+    const songCreationData = songs.map((song: { name: string }) => ({
+        name: song.name,
+        link: "a",
+    }))
+
+    try {
+
+      const existingAlbum = await prisma.album.findUnique({
+          where: { link: album_link },
+      })
+
+
+      const band = await prisma.banda.upsert({
+          where: { nome: banda_nome },
+          update: { foto: banda_image.images[0].url },
+          create: {
+              nome: banda_nome,
+              foto: banda_image.images[0].url,
+          }
+      })
+
+      let album;
+      if (existingAlbum) {
+          album = await prisma.album.update({
+              where: { link: album_link },
+              data: {
+                  users: {
+                      connect: { id: userId },
+                  },
+              },
+          })
+      } else {
+
+          const album = await prisma.album.create({
+              data: {
+                  nome: album_nome,
+                  link: album_link,
+                  capa: album_art,
+                  nota: 0.0,
+                  banda: {
+                      connect: { id: band.id },
+                  },
+                  songs: {
+                      create: songCreationData,
+                  },
+                  users: {
+                      connect: { id: userId }
+                  }
+              },
+              include: {
+                  banda: true,
+                  songs: true,
+                  users: true,
+              }
+          })
+          return NextResponse.json(album)
+      }
+
+      
+
+    } catch (error) {
+        console.log(error)
+        return NextResponse.json({ error: 'Erro ao criar o album' });
+    }
+
+    return NextResponse.json({ error: 'Não foi possivel criar o álbum' });
   }

@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id      String @id @default(uuid())
+  usuario String
+  email   String @unique
+  password   String
+  albuns  Album[]  @relation("UserAlbuns")
+  ratings Rating[]
+}
+
+model Album {
+  id      Int     @id @default(autoincrement())
+  nome    String
+  link    String @unique
+  capa    String
+  nota    Decimal
+  bandaId Int
+  banda   Banda   @relation(fields: [bandaId], references: [id])
+  songs   Song[]
+  users   User[]  @relation("UserAlbuns")
+  ratings Rating[]
+}
+
+model Banda {
+  id     Int     @id @default(autoincrement())
+  nome   String  @unique
+  foto   String?
+  albums Album[]
+}
+
+model Song {
+  id      Int    @id @default(autoincrement())
+  name    String
+  link    String
+  albumId Int
+  album   Album  @relation(fields: [albumId], references: [id], onDelete: Cascade)
+}
+
+model Rating {
+  id       Int    @id @default(autoincrement())
+  nota     Decimal
+  userId   String
+  albumId  Int
+  user     User   @relation(fields: [userId], references: [id])
+  album    Album  @relation(fields: [albumId], references: [id])
+
+  dateRated  DateTime?
+
+  @@unique([userId, albumId])
+}

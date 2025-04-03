@@ -3,8 +3,8 @@ import AlbumsFavoritosCard from "../components/tabs/albums-favoritos-card";
 import '@testing-library/jest-dom';
 
 const mockAlbums = [
-  { nome: "Abbey Road", banda: "The Beatles", capa: "url1", nota: 9.5 },
-  { nome: "The Dark Side of the Moon", banda: "Pink Floyd", capa: "url2", nota: 9.8 },
+  { nome: "Abbey Road", banda: {nome: "The Beatles"}, capa: "url1", nota: 9.5 },
+  { nome: "The Dark Side of the Moon", banda: {nome: "Pink Floyd"}, capa: "url2", nota: 9.8 },
 ];
 
 describe("AlbumsFavoritosCard", () => {
