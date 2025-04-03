@@ -24,9 +24,9 @@ export default function AlbumGrid(){
             {albums.map((album, key) => (
                 <AlbumCard key={key} album={{
                     nome: album.nome,
-                    banda: album.banda.nome,
+                    banda: album.banda,
                     capa: album.capa,
-                    nota: 10
+                    nota: album.nota
                 }} />
             ))}
         </main>

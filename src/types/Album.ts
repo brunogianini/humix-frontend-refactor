@@ -1,6 +1,8 @@
+import { Banda } from "@prisma/client"
+
 export type Album = {
     nome: string
-    banda: string
+    banda: Banda
     capa: string
     nota: number
 }

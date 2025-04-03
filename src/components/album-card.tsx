@@ -26,7 +26,7 @@ export default function AlbumCard({album}: {album: Album}){
             }
             <div className="absolute bottom-0 p-5 w-full bg-gradient-to-t from-black to-transparent rounded-lg">
                 <p className="text-lg font-bold">{album.nome}</p>
-                <p className="text-sm font-medium">{album.banda}</p>
+                <p className="text-sm font-medium">{album.banda.nome}</p>
             </div>
 
         </Card>
