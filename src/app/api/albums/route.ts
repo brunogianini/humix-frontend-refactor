@@ -10,7 +10,6 @@ export async function GET(req: NextRequest) {
     const session = await getServerSession(authOptions)
     const userId = session?.user.id
     
-    console.log(session)
 
     try {
         const albums = await prisma.album.findMany({

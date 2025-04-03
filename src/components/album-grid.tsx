@@ -15,7 +15,6 @@ export default function AlbumGrid(){
     }
 
     async function fetchAlbums(){
-        console.log(session?.user.id)
         await fetch(`/api/albums/`)
             .then((res) => res.json())
             .then((data) => {
