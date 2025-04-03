@@ -5,13 +5,21 @@ import { NextRequest, NextResponse } from "next/server";
 const albums: Album[] = [
     {
       nome: "Ants From Up There",
-      banda: "Black Country, New Road",
+      banda: {
+        nome: "Black Country, New Road",
+        id: 0,
+        foto: null
+      },
       capa: "https://cdn-images.dzcdn.net/images/cover/63683966b1ecb7d3c82118cf27641a58/500x500.jpg",
       nota: 10,
     },
     {
       nome: "In Rainbows",
-      banda: "Radiohead",
+      banda: {
+        nome: "Black Country, New Road",
+        id: 0,
+        foto: null
+      },
       capa: "https://upload.wikimedia.org/wikipedia/pt/9/96/Radiohead_-_In_Rainbows.jpg",
       nota: 10,
     }
