@@ -1,6 +1,6 @@
-import prisma from "@/lib/prisma";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import prisma from "@/lib/prisma";
 
 export const authOptions: NextAuthOptions = {
     pages: {
@@ -26,30 +26,29 @@ export const authOptions: NextAuthOptions = {
                     return null;
                 }
 
-                return user 
+                return user;
             }
         })
     ],
 
     callbacks: {
-      async jwt({ token, user }) {
-          if (user) {
-            token.id = user.id as string; 
-        }
-        return token;
-      },
+        async jwt({ token, user }) {
+            if (user) {
+                token.id = user.id; 
+            }
+            return token;
+        },
 
-      async session({ session, token }) {
-        
-        if (token) {
-          session.user = {
-              id: token.id as string, 
-              email: token.email as string,
-          };
-      }
-      return session;
-      }
-  }
+        async session({ session, token }) {
+            if (token) {
+                session.user = {
+                    id: token.id as string, 
+                    email: token.email as string,
+                };
+            }
+            return session;
+        }
+    }
 };
 
 const handler = NextAuth(authOptions);

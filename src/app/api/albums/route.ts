@@ -8,6 +8,8 @@ import { authOptions } from "../auth/[...nextauth]/route";
 export async function GET(req: NextRequest) {
     const session = await getServerSession(authOptions)
     const userId = session?.user.id
+    
+    console.log(session)
 
     try {
         const albums = await prisma.album.findMany({
@@ -41,7 +43,7 @@ export async function GET(req: NextRequest) {
 
   export async function POST(req: NextRequest){
     const { nome, banda } = await req.json()
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     const userId = session?.user.id
 
     const album = await searchAlbum(nome, banda)
