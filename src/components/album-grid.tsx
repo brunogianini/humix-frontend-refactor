@@ -30,10 +30,12 @@ export default function AlbumGrid(){
         <main className="flex flex-wrap gap-2">
             {albums.map((album, key) => (
                 <AlbumCard key={key} album={{
+                    id: album.id,
                     nome: album.nome,
                     banda: album.banda,
                     capa: album.capa,
-                    nota: album.nota
+                    nota: album.nota,
+                    ratings: album.ratings
                 }} />
             ))}
         </main>

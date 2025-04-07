@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
         const albums = await prisma.album.findMany({
             where: {
                 users: { 
-                    some: { id: userId }
+                    some: { id: userId}
                 },
                 ratings: {
                     none: {
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
                 banda: true, 
                 songs: true,
                 ratings: {
-                    where: { userId: userId }
+                    where: { userId: userId}
                 }
             }
         });
