@@ -6,16 +6,27 @@ import { Album } from "@/types/Album";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 
-export default function AlbumGrid(){
+interface Props {
+    tipo: number
+}
+
+export default function AlbumGrid({ tipo }: Props){
     const [albums, setAlbums] = useState<Album[]>([])
     const { data: session, status } = useSession()
 
     if (status === "unauthenticated") {
         redirect("/login");
     }
+    let url = ""
+
+    if (tipo == 0) {
+        url = '/api/albums/'
+    } else {
+        url = '/api/albums-rated/'
+    }
 
     async function fetchAlbums(){
-        await fetch(`/api/albums/`)
+        await fetch(url)
             .then((res) => res.json())
             .then((data) => {
                 setAlbums(data)

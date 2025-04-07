@@ -27,7 +27,7 @@ const data = {
         },
         {
           title: "Classificados",
-          url: "#",
+          url: "/minhas-notas",
         },
       ],
     },
